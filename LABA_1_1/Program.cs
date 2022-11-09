@@ -21,6 +21,9 @@ namespace LABA1
 
             while (true)
             {
+                // очистка буфера, чтобы исключить нажатия на клавиатуру тогда, когда не ждём ввода
+                while (Console.KeyAvailable) { Console.ReadKey(true); }
+
                 Console.Clear();
                 Console.WriteLine("[0] Exit");
                 Console.WriteLine("[1] Hello World!");
@@ -196,26 +199,69 @@ namespace LABA1
 
     public class STR
     {
+        // функция для удаления дублирующих проблелов. Приватная, т.к. используется
+        // локальными функциями и нет смысла в её использовании из вне
+        private string deleteDoubleSpaces(string str) {
+            bool isDone = false;
+            while(!isDone) {
+                str = str.Replace("  ", " ");
+                if(!str.Contains("  ")) {
+                    isDone = true;
+                }
+            }
+            return str;
+        }
+
+         private bool isPerevertysh(string str1, string str2) {
+            //
+            //
+            return true;
+        }
         public void STR1()
         {
             string str1, str2;
+
             Console.WriteLine("Введите первую строку: ");
             str1 = Console.ReadLine();
+
             Console.WriteLine("Введите вторую строку: ");
             str2 = Console.ReadLine();
+            
             Console.WriteLine("\n");
 
-            if (str1 != str2) Console.WriteLine("False!");
-            else Console.WriteLine("True");
+            // если строки не равны - возвращаем ошибку
+            if (str1 != str2) 
+            {
+                Console.WriteLine("False!");
+            } else {
+                Console.WriteLine("True");
+            }
 
-            var str1WithoutSpaces = str1.Replace(" ", "");
-            Console.WriteLine(str1WithoutSpaces);
+            // создаём модифицированные переменные, чтобы работать с начальными строками
+            // и не испортить их
+            var str1modified = deleteDoubleSpaces(str1.Trim(' '));
 
-            var str2WithoutSpaces = str2.Replace(" ", "");
-            Console.WriteLine(str2WithoutSpaces);
+            var str2modified = deleteDoubleSpaces(str2.Trim(' '));
+            
 
-            if (str1WithoutSpaces != str2WithoutSpaces) Console.WriteLine("False!");
-            else Console.WriteLine("True");
+            Console.WriteLine($"{isPerevertysh(str1modified, str2modified)}");
+
+            // if(str1withoutDoubles.Length != str2withoutDoubles.Length) {
+            //     Console.WriteLine("Не перевёртыши");
+            // } else {
+            //     for(int i = 0,  j = str1withoutDoubles.Length - 1; i < j;i++,j--)
+            //     {
+            //         if (str1withoutDoubles[i] != str2withoutDoubles[j])
+            //         {
+            //             isPerevertysh = false;
+            //             break;
+            //         }
+            //     }
+            // }
+            // if(isPerevertysh == false) {
+            //     Console.WriteLine("Перевёртыши");
+            // }
+            // Console.WriteLine(a ? "Да, является." : "Нет,не является.");
 
             Console.ReadKey();
 
