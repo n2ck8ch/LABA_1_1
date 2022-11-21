@@ -7,6 +7,8 @@ using System.Threading;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.CompilerServices;
 
+using System.Text.RegularExpressions;
+
 namespace LABA1
 {
     internal class Task:chisla
@@ -212,11 +214,30 @@ namespace LABA1
             return str;
         }
 
+        private bool isSameLoweredTrimedWithoutDoubleSpaces(string str1, string str2) {
+            str1 = str1.ToLower().Trim(' ');
+            str1 = deleteDoubleSpaces(str1);
+            
+            str2 = str2.ToLower().Trim(' ');
+            str2 = deleteDoubleSpaces(str2);
+
+            return str1 == str2;
+        }
+
          private bool isPerevertysh(string str1, string str2) {
-            //
-            //
+            if(str1.Length != str2.Length) {
+                return false;
+            }
+
+            for (int i = 0, lenght = str1.Length; i < lenght/2; i++)
+            {   
+                if(str1[i] != str2[lenght-1-i]) {
+                    return false;
+                }
+            }
             return true;
         }
+
         public void STR1()
         {
             string str1, str2;
@@ -230,38 +251,19 @@ namespace LABA1
             Console.WriteLine("\n");
 
             // если строки не равны - возвращаем ошибку
-            if (str1 != str2) 
-            {
-                Console.WriteLine("False!");
-            } else {
-                Console.WriteLine("True");
-            }
+            Console.WriteLine($"Совпадают ли они посимвольно: {str1 == str2}");
 
-            // создаём модифицированные переменные, чтобы работать с начальными строками
-            // и не испортить их
-            var str1modified = deleteDoubleSpaces(str1.Trim(' '));
+            Console.WriteLine($"Совпадают ли в приведённом виде: {isSameLoweredTrimedWithoutDoubleSpaces(str1,str2)}");
 
-            var str2modified = deleteDoubleSpaces(str2.Trim(' '));
-            
+            Console.WriteLine($"Являются ли перевёртышами друг друга: {isPerevertysh(str1, str2)}");
 
-            Console.WriteLine($"{isPerevertysh(str1modified, str2modified)}");
+            Regex validateEmailRegex = new Regex("[^@ \t\r\n]+@[^@ \t\r\n]+\\.[^@ \t\r\n]+");
+            Regex validatePhoneRegex = new Regex("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$");
+            Regex validateIPRegex = new Regex("(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}");
 
-            // if(str1withoutDoubles.Length != str2withoutDoubles.Length) {
-            //     Console.WriteLine("Не перевёртыши");
-            // } else {
-            //     for(int i = 0,  j = str1withoutDoubles.Length - 1; i < j;i++,j--)
-            //     {
-            //         if (str1withoutDoubles[i] != str2withoutDoubles[j])
-            //         {
-            //             isPerevertysh = false;
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(isPerevertysh == false) {
-            //     Console.WriteLine("Перевёртыши");
-            // }
-            // Console.WriteLine(a ? "Да, является." : "Нет,не является.");
+            Console.WriteLine($"Являются ли e-mail:\tпервая строка - {validateEmailRegex.IsMatch(str1)}\tвторая строка - {validateEmailRegex.IsMatch(str2)}");
+            Console.WriteLine($"Являются ли telephone:\tпервая строка - {validatePhoneRegex.IsMatch(str1)}\tвторая строка - {validatePhoneRegex.IsMatch(str2)}");
+            Console.WriteLine($"Являются ли IP: \tпервая строка - {validateIPRegex.IsMatch(str1)}\tвторая строка - {validateIPRegex.IsMatch(str2)}");
 
             Console.ReadKey();
 
